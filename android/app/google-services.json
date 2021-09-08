@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "421926768701",
+    "project_id": "whatsapp-status-saver-a5459",
+    "storage_bucket": "whatsapp-status-saver-a5459.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421926768701:android:6e72771f497ca5979f5a54",
+        "android_client_info": {
+          "package_name": "dewz.whatsapp.status.status_saver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "421926768701-h841k4dov7aim34j486n9qopjujbqhcf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dewz.whatsapp.status.status_saver",
+            "certificate_hash": "6b1542ff8c6bb5f2584e48e7ff67b72927ed5939"
+          }
+        },
+        {
+          "client_id": "421926768701-r2f5aghbpr5l95bmrn7ast9h1tebeb5m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG1XuVJIgMRQ_hRddntfTWuh1R70gd3xo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "421926768701-r2f5aghbpr5l95bmrn7ast9h1tebeb5m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
