@@ -46,7 +46,11 @@ const String tempWaShare = 'ss_tmp_share';
 const welcomedStorageKey = 'USER_WELCOMED_STORAGE_KEY_!242B1634';
 const darkModeStorageKey = 'DARK_MODE_ENABLED_STORAGE_KEY_324!@&';
 const notificationEnabledKey = "NOTIFICATION_ENABLED_KEY_@#@132453";
-const bugLogKey = "APP_BUG_LOG_KEY_!@#11314";
+const saveUnlockedTypesKey = "UNLOCKED_TYPES_GET_KEY_SAVE_@#!@2314-0/";
+const messageFeatureUnlockedState =
+    "MESSAGE_FEATURE_UNLOCKED_STATE_@#!#!Key+GEt";
+
+const durationOneWeek = Duration(days: 7);
 
 const avatarColors = <Color>[
   Colors.lightBlueAccent,

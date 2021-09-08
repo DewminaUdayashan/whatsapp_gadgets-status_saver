@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_gadgets/constants/constants.dart';
 import 'package:whatsapp_gadgets/constants/texts.dart';
 import 'package:whatsapp_gadgets/constants/whatsapp_types.dart';
+import 'package:whatsapp_gadgets/controllers/ad_controller.dart';
 import 'package:whatsapp_gadgets/controllers/app_controller.dart';
 import 'package:whatsapp_gadgets/controllers/image_controller.dart';
 import 'package:whatsapp_gadgets/controllers/notification_controller.dart';
@@ -101,7 +102,16 @@ class CustomDrawer extends StatelessWidget {
                       final permission =
                           await ListenWhatsapp.checkIsServiceEnabled();
                       if (permission) {
-                        Get.toNamed("/messages");
+                        print('ready to start');
+                        if (Get.find<AdController>()
+                            .isUndeletedMessagesUnlocked
+                            .value) {
+                          print('navigating =========================>');
+                          Get.toNamed("/messages");
+                        } else {
+                          print('Unlock =========================>');
+                          DialogHelper.showUnlockUndeletedMessageDialog();
+                        }
                       } else {
                         DialogHelper.askNotificationPermission();
                       }
@@ -130,9 +140,9 @@ class CustomDrawer extends StatelessWidget {
                           child: IconButton(
                             onPressed: () async {
                               try {
-                                final number = '+94787693462';
-                                final message = "";
-                                final url =
+                                const number = '+94787693462';
+                                const message = "";
+                                const url =
                                     "https://wa.me/$number?text=$message";
                                 if (await canLaunch(url)) {
                                   await launch(url);

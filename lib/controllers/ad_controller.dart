@@ -1,34 +1,53 @@
 import 'package:facebook_audience_network/ad/ad_interstitial.dart';
 import 'package:facebook_audience_network/ad/ad_native.dart';
-import 'package:facebook_audience_network/ad/ad_rewarded.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp_gadgets/constants/constants.dart';
 import 'package:whatsapp_gadgets/constants/whatsapp_types.dart';
 import 'package:whatsapp_gadgets/controllers/app_controller.dart';
+import 'package:whatsapp_gadgets/helpers/snack_helper.dart';
+import 'package:whatsapp_gadgets/helpers/storage_helper.dart';
 import 'package:whatsapp_gadgets/models/accessible_wa_type_model.dart';
 
 class AdController extends GetxController {
-  RxList<AccessibleWATypeModel> accessibleWATypes =
-      List<AccessibleWATypeModel>.empty(growable: true).obs;
-  RxBool isInterstitialLoaded = false.obs;
-  RxBool isInterstitialVideoWatched = false.obs;
-  RxBool isTypeChangeDialogLoading = false.obs;
+  RxList<AccessibleWATypeModel> accessibleWATypes = <AccessibleWATypeModel>[
+    AccessibleWATypeModel(whatsAppType: WhatsAppType.normal.toString()),
+    AccessibleWATypeModel(whatsAppType: WhatsAppType.dual.toString()),
+    AccessibleWATypeModel(whatsAppType: WhatsAppType.saved.toString()),
+  ].obs;
+  final RxBool isInterstitialLoaded = false.obs;
+  final RxBool isInterstitialVideoWatched = false.obs;
+  final RxBool isTypeChangeDialogLoading = false.obs;
+  final RxBool isUndeletedMessagesUnlocked = false.obs;
+  late Map<String, dynamic> undeletedMessageState;
 
-  Future<void> addAccessibleWaType() async {
-    print("TYPE ADDING.................................!");
-    accessibleWATypes.add(
-      AccessibleWATypeModel(
-        whatsAppType: Get.find<AppController>().selectedWhatsAppType,
-        updatedAt: DateTime.now().toString(),
-      ),
-    );
+  Future<void> unlockUndeleteMessages() async {
     isTypeChangeDialogLoading.value = true;
-    await Future.delayed(const Duration(seconds: 2));
+    isUndeletedMessagesUnlocked.value = true;
+    StorageHelper.saveMessageFeatureUnlockedStatus(true);
+    await Future.delayed(const Duration(seconds: 3));
     isTypeChangeDialogLoading.value = false;
     if (Get.isDialogOpen!) {
       Get.back();
     }
+  }
+
+  Future<void> addAccessibleWaType() async {
+    isTypeChangeDialogLoading.value = true;
+    accessibleWATypes.add(
+      AccessibleWATypeModel(
+        whatsAppType: Get.find<AppController>().selectedWhatsAppType.toString(),
+        updatedAt: DateTime.now().toString(),
+      ),
+    );
+    await Future.delayed(const Duration(seconds: 3));
+    isTypeChangeDialogLoading.value = false;
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }
+    StorageHelper.saveUnlockedTypes(accessibleWATypes);
+    SnackHelper.unlockedByAd();
   }
 
   FacebookNativeAd typeChangeDialogNativeAd() => FacebookNativeAd(
@@ -53,26 +72,6 @@ class AdController extends GetxController {
         },
       );
 
-  void showInterstitialAd() {
-    FacebookInterstitialAd.loadInterstitialAd();
-  }
-
-  Future<void> _loadInterstitialAd() async {
-    await FacebookInterstitialAd.loadInterstitialAd(
-      placementId: "1868610943311642_1868969399942463",
-      listener: (result, value) {
-        if (result == InterstitialAdResult.LOADED) {
-          isInterstitialLoaded.value = true;
-        }
-        if (result == InterstitialAdResult.DISMISSED) {
-          print("Video completed");
-          isInterstitialVideoWatched.value = true;
-          FacebookInterstitialAd.destroyInterstitialAd();
-        }
-      },
-    );
-  }
-
   FacebookNativeAd mainTopNativeBannerAd(BuildContext context) =>
       FacebookNativeAd(
         placementId: "1868610943311642_1868611856644884",
@@ -90,25 +89,28 @@ class AdController extends GetxController {
         },
       );
 
-  @override
-  void onInit() {
-    super.onInit();
-    _loadInterstitialAd();
-    accessibleWATypes
-        .add(AccessibleWATypeModel(whatsAppType: WhatsAppType.normal));
-    accessibleWATypes
-        .add(AccessibleWATypeModel(whatsAppType: WhatsAppType.saved));
-    accessibleWATypes.add(AccessibleWATypeModel(whatsAppType: WhatsAppType.gb));
-    accessibleWATypes
-        .add(AccessibleWATypeModel(whatsAppType: WhatsAppType.dual));
+  void _loadUnlockedFeatures() {
+    // WhatsApp Types
+    for (final type in StorageHelper.getUnlockedTypes()) {
+      accessibleWATypes.addIf(!accessibleWATypes.contains(type), type);
+    }
+    StorageHelper.saveUnlockedTypes(accessibleWATypes);
+    //
+    //Messages
+    undeletedMessageState = StorageHelper.isMessageFeatureUnlocked();
+    print("PREMIUM FEATURE PRINTIN ===> " + undeletedMessageState.toString());
+    isUndeletedMessagesUnlocked.value = undeletedMessageState["status"] as bool;
+  }
 
-    // Remove Subscriptions after week
+  // Remove Subscriptions after week
+  void _validateUnlockedFeatures() {
     Future.delayed(const Duration(seconds: 15), () {
-      for (AccessibleWATypeModel waTypeModel in accessibleWATypes) {
+      final List<AccessibleWATypeModel> _tmp = List.from(accessibleWATypes);
+      for (AccessibleWATypeModel waTypeModel in _tmp) {
         String? updatedAt = waTypeModel.updatedAt;
-        if (updatedAt != null) {
+        if (updatedAt != null && !updatedAt.contains("null")) {
           DateTime updatedAtDate = DateTime.parse(waTypeModel.updatedAt!)
-              .add(const Duration(days: 7));
+              .add(durationOneWeek); //TODO: ADD DAYS
           if (updatedAtDate
               .toUtc()
               .toLocal()
@@ -116,7 +118,31 @@ class AdController extends GetxController {
             accessibleWATypes.remove(waTypeModel);
           }
         }
+        StorageHelper.saveUnlockedTypes(accessibleWATypes);
+      }
+
+      String undeletedMsgUpdatedAt = undeletedMessageState["updatedAt"];
+      if (!undeletedMsgUpdatedAt.contains("null")) {
+        DateTime undeletedMsgUpdatedAtDate =
+            DateTime.parse(undeletedMsgUpdatedAt).add(durationOneWeek);
+        if (undeletedMsgUpdatedAtDate
+            .toUtc()
+            .toLocal()
+            .isBefore(DateTime.now().toUtc().toLocal())) {
+          print('PREMIUM FEATURE OUTDATED');
+          isUndeletedMessagesUnlocked.value = false;
+          StorageHelper.saveMessageFeatureUnlockedStatus(false);
+        } else {
+          isUndeletedMessagesUnlocked.value = true;
+        }
       }
     });
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    _loadUnlockedFeatures();
+    _validateUnlockedFeatures();
   }
 }

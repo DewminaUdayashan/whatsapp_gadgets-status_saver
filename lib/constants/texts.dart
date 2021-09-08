@@ -31,5 +31,5 @@ const notificationPermission = "Permission Needed";
 const notificationPermission2 =
     "We are saving your whatsapp messages to another backup location of your mobile phone. We use notifications for this process. So, it dose not matter sender delete the message, "
     "you can still view it from our app. For this feature to work properly please choose this application from next window & switch on permissions.\nThen you can access to UnDelete WhatsApp Messages section";
-const unlockW4BTitle = "🔥\nUnlock WhatsApp Business Free";
-const unlockW4BDetail = "You can wait & unlock WhatsApp Business weekly.";
+const unlockW4BTitle = "🔥\nUnlock WhatsApp Premium Free";
+const unlockW4BDetail = "You can wait & unlock WhatsApp premium types weekly.";

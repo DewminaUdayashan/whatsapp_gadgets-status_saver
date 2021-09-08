@@ -195,12 +195,10 @@ class AppController extends GetxController {
     }
 
     ever(_selectedWhatsAppType, (whatsappType) {
-      print("WhatsApp Type Changed =======> $whatsappType");
       bool canAccess = false;
       for (AccessibleWATypeModel accessibleWATypeModel
           in Get.find<AdController>().accessibleWATypes) {
-        if (accessibleWATypeModel.whatsAppType == whatsappType) {
-          print("Type Already Unlocked");
+        if (accessibleWATypeModel.whatsAppType == whatsappType.toString()) {
           canAccess = true;
           return;
         }

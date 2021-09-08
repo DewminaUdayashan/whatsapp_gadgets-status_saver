@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readmore/readmore.dart';
 import 'package:whatsapp_gadgets/constants/constants.dart';
 import 'package:whatsapp_gadgets/controllers/messages_controller.dart';
 import 'package:whatsapp_gadgets/models/message_model.dart';
@@ -41,36 +42,34 @@ class _GroupMessageViewState extends State<GroupMessageView> {
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.all(9.0),
-            child: Flex(
-              direction: Axis.horizontal,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: context.isDarkMode ? Colors.grey[900] : Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(9.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          messages[index].sender,
-                          style: context.theme.textTheme.headline5!.copyWith(
-                            fontSize: 16,
-                          ),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: context.isDarkMode ? Colors.grey[900] : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(9.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        messages[index].sender,
+                        style: context.theme.textTheme.headline5!.copyWith(
+                          fontSize: 16,
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          messages[index].message,
-                          style: context.theme.textTheme.headline6,
-                        ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 5),
+                      ReadMoreText(
+                        messages[index].message,
+                        style: context.theme.textTheme.headline5,
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           );
         },

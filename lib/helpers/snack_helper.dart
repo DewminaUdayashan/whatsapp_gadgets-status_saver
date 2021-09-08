@@ -8,6 +8,24 @@ import 'package:whatsapp_gadgets/constants/constants.dart';
 import 'package:whatsapp_gadgets/constants/texts.dart';
 
 class SnackHelper {
+  static void unlockedByAd() {
+    Get.rawSnackbar(
+      backgroundColor: tealGreen,
+      icon: const Icon(
+        Icons.check_circle,
+        color: Colors.white,
+      ),
+      titleText: const Text(
+        'Congratulations..',
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      messageText: const Text(
+          "You've unlocked premium features. You can always unlock features weekly"),
+      duration: const Duration(seconds: 6),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
+
   static void contactError() {
     Get.rawSnackbar(
       backgroundColor: Colors.amber,

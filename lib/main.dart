@@ -30,11 +30,12 @@ Future<void> main() async {
     FacebookAudienceNetwork.init(
       testingId: "93844ac8-5f8f-4abd-9588-b3bb99a9cae9",
     );
-    runApp(MyApp());
+    runApp(const MyApp());
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}):super(key: key);
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([

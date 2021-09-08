@@ -46,6 +46,7 @@ dependencies:
   firebase_core: ^1.6.0
   lint: ^1.6.0
   readmore: ^2.1.0
+  flutter_lints: ^1.0.4
   facebook_audience_network: ^1.0.0-nullsafety.0
   storage_access_framework:
     git:

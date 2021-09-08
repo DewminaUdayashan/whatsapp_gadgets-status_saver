@@ -4,7 +4,10 @@ import 'package:whatsapp_gadgets/constants/texts.dart';
 import 'package:whatsapp_gadgets/controllers/ad_controller.dart';
 
 class UnlockTypeDialog extends GetWidget<AdController> {
-  const UnlockTypeDialog({Key? key}) : super(key: key);
+  final bool forUnlockMessages;
+
+  const UnlockTypeDialog({Key? key, this.forUnlockMessages = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,13 @@ class UnlockTypeDialog extends GetWidget<AdController> {
               children: [
                 Obx(
                   () => TextButton(
-                    onPressed: () => controller.addAccessibleWaType(),
+                    onPressed: () {
+                      if(!forUnlockMessages){
+                        controller.addAccessibleWaType();
+                      }else{
+                        controller.unlockUndeleteMessages();
+                      }
+                    },
                     style: TextButton.styleFrom(
                       backgroundColor: Colors.green,
                     ),

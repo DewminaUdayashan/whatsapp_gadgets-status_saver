@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp_gadgets/constants/constants.dart' as constants;
 import 'package:whatsapp_gadgets/constants/whatsapp_types.dart';
+import 'package:whatsapp_gadgets/controllers/ad_controller.dart';
 import 'package:whatsapp_gadgets/controllers/app_controller.dart';
 import 'package:whatsapp_gadgets/controllers/image_controller.dart';
 import 'package:whatsapp_gadgets/helpers/utils.dart';
 
 class ImageView extends StatefulWidget {
-  const ImageView(this.currentIndex);
-
+  const ImageView(this.currentIndex, {Key? key}) : super(key: key);
   final int currentIndex;
 
   @override
@@ -38,51 +38,57 @@ class _ImageViewState extends State<ImageView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        if (isDialOpen.value) {
+          isDialOpen.value = false;
+          return false;
+        }
         controller.selectedImageList.clear();
         return true;
       },
-      child: WillPopScope(
-        onWillPop: () async {
-          if (isDialOpen.value) {
-            isDialOpen.value = false;
-            return false;
-          }
-          controller.selectedImageList.clear();
-          return true;
-        },
+      child: SafeArea(
         child: Scaffold(
           backgroundColor: context.theme.accentColor,
           body: Stack(
             children: [
-              PhotoViewGallery.builder(
-                itemCount: controller.getImages.length,
-                builder: (context, index) {
-                  return PhotoViewGalleryPageOptions(
-                    imageProvider: MemoryImage(controller.getImages[index]),
-                    initialScale: PhotoViewComputedScale.contained,
-                    minScale: PhotoViewComputedScale.contained,
-                  );
-                },
-                loadingBuilder: (context, event) => Center(
-                  child: SizedBox(
-                    width: 20.0,
-                    height: 20.0,
-                    child: CircularProgressIndicator(
-                      value: event == null
-                          ? 0
-                          : event.cumulativeBytesLoaded /
-                              event.expectedTotalBytes!,
+              Column(
+                children: [
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Expanded(
+                    child: PhotoViewGallery.builder(
+                      itemCount: controller.getImages.length,
+                      builder: (context, index) {
+                        return PhotoViewGalleryPageOptions(
+                          imageProvider:
+                              MemoryImage(controller.getImages[index]),
+                          initialScale: PhotoViewComputedScale.contained,
+                          minScale: PhotoViewComputedScale.contained,
+                        );
+                      },
+                      loadingBuilder: (context, event) => Center(
+                        child: SizedBox(
+                          width: 20.0,
+                          height: 20.0,
+                          child: CircularProgressIndicator(
+                            value: event == null
+                                ? 0
+                                : event.cumulativeBytesLoaded /
+                                    event.expectedTotalBytes!,
+                          ),
+                        ),
+                      ),
+                      backgroundDecoration: BoxDecoration(
+                        color: context.theme.scaffoldBackgroundColor,
+                      ),
+                      pageController:
+                          PageController(initialPage: widget.currentIndex),
+                      onPageChanged: (index) {
+                        controller.setSelectedSingleImage(index);
+                      },
                     ),
                   ),
-                ),
-                backgroundDecoration: BoxDecoration(
-                  color: context.theme.scaffoldBackgroundColor,
-                ),
-                pageController:
-                    PageController(initialPage: widget.currentIndex),
-                onPageChanged: (index) {
-                  controller.setSelectedSingleImage(index);
-                },
+                ],
               ),
               Positioned(
                 bottom: 0,
@@ -169,12 +175,13 @@ class _ImageViewState extends State<ImageView> {
                                 ),
                             ],
                           ),
-                        ]
+                        ],
                       ],
                     ),
                   ),
                 ),
-              )
+              ),
+              Get.find<AdController>().mainTopNativeBannerAd(context),
             ],
           ),
         ),
@@ -182,6 +189,3 @@ class _ImageViewState extends State<ImageView> {
     );
   }
 }
-
-
-

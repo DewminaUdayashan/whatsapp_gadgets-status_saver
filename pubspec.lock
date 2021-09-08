@@ -160,6 +160,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.0"
+  flutter_lints:
+    dependency: "direct main"
+    description:
+      name: flutter_lints
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.4"
   flutter_local_notifications:
     dependency: "direct main"
     description:
@@ -247,6 +254,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.0"
+  lints:
+    dependency: transitive
+    description:
+      name: lints
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   liquid_pull_to_refresh:
     dependency: "direct main"
     description:
@@ -259,7 +273,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: ef772e0dc45d530a921de33e9c392066f403e239
+      resolved-ref: a33b10419eb47e8ca22dd9493bc42f53e76a1574
       url: "git://github.com/DewminaUdayashan/listen_whatsapp.git"
     source: git
     version: "0.0.1"

@@ -47,4 +47,13 @@ class DialogHelper {
     Get.dialog(const UnlockTypeDialog(),
         barrierDismissible: false, name: "Type_Unlock_Dialog");
   }
+
+  static void showUnlockUndeletedMessageDialog() async {
+    Get.dialog(
+        const UnlockTypeDialog(
+          forUnlockMessages: true,
+        ),
+        barrierDismissible: false,
+        name: "Type_Unlock_Dialog");
+  }
 }
