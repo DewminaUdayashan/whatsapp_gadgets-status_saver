@@ -5,6 +5,7 @@ import 'package:whatsapp_gadgets/constants/constants.dart';
 import 'package:whatsapp_gadgets/constants/controllers_instatnceses.dart';
 import 'package:whatsapp_gadgets/constants/texts.dart';
 import 'package:whatsapp_gadgets/constants/whatsapp_types.dart';
+import 'package:whatsapp_gadgets/controllers/ad_controller.dart';
 import 'package:whatsapp_gadgets/controllers/image_controller.dart';
 import 'package:whatsapp_gadgets/controllers/video_controller.dart';
 import 'package:whatsapp_gadgets/helpers/dialog_helper.dart';
@@ -12,7 +13,7 @@ import 'package:whatsapp_gadgets/helpers/permission/api30_permission_handler.dar
 import 'package:whatsapp_gadgets/helpers/snack_helper.dart';
 import 'package:whatsapp_gadgets/helpers/utils.dart';
 
-class ChangeWATypeDialog extends StatelessWidget {
+class ChangeWATypeDialog extends GetWidget<AdController> {
   const ChangeWATypeDialog({Key? key}) : super(key: key);
 
   @override
@@ -41,7 +42,7 @@ class ChangeWATypeDialog extends StatelessWidget {
                 () => Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ...controller.availableWhatsAppTypes.map((type) {
+                    ...controller.availableWhatsAppTypes.toSet().toList().map((type) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8),
                         child: ListTile(
@@ -52,8 +53,8 @@ class ChangeWATypeDialog extends StatelessWidget {
                             final List<String> paths =
                                 await Utils.getPathForWaType(type);
                             if (await controller.isNewVersion()) {
-                              final val =
-                                  await Api30PermissionHandler.checkPermission(
+                              final val = await Api30PermissionHandler
+                                  .checkPermission(
                                 url: paths.first.replaceAll('%20', ' '),
                                 blockNavigate: true,
                               );
@@ -67,7 +68,6 @@ class ChangeWATypeDialog extends StatelessWidget {
                                   Get.back();
                                 }
                               } else {
-                                print("PATH ======> ${paths.first}");
                                 DialogHelper.permissionDialogApi30(
                                     overrideDefaultFunction: () async {
                                   if (await Api30PermissionHandler
@@ -115,10 +115,10 @@ class ChangeWATypeDialog extends StatelessWidget {
                                   .copyWith(
                                     fontSize: 20,
                                     fontWeight: FontWeight.w400,
-                                    color:
-                                        controller.selectedWhatsAppType == type
-                                            ? Colors.green[900]
-                                            : Colors.white,
+                                    color: controller.selectedWhatsAppType ==
+                                            type
+                                        ? Colors.green[900]
+                                        : Colors.white,
                                   ),
                             ),
                           ),

@@ -56,6 +56,8 @@ class AppController extends GetxController {
   //Selected WA Type
   WhatsAppType get selectedWhatsAppType => _selectedWhatsAppType.value;
 
+  set setWhatsAppType(WhatsAppType type) => _selectedWhatsAppType.value = type;
+
   set selectWhatsAppType(WhatsAppType type) =>
       _selectedWhatsAppType.value = type;
 
@@ -109,27 +111,31 @@ class AppController extends GetxController {
     clearCache();
     final int? _buildVersion = await StorageAccessFramework.platformVersion;
     if (_buildVersion != null) {
-      await Utils.checkInstalledWhatsApps(_buildVersion);
-      selectWhatsAppType = availableWhatsAppTypes.first;
-      if (_buildVersion > 28) {
-        print(
-            "<--------------------- Running on Above Api 28 --------------------->");
-        _paths.addAll(await Utils.getPathForWaType(selectedWhatsAppType));
-        Api30PermissionHandler.checkPermission(url: _paths.first);
-        ever(_isExistingUser, (bool data) {
-          if (data) {
-            Get.toNamed('/splash');
-          }
-        });
+      await Utils.checkInstalledWhatsApps(_buildVersion, returnOnly: false);
+      if (availableWhatsAppTypes.isEmpty) {
+        DialogHelper.noAnyPathsFoundDialog();
       } else {
-        print(
-            "<--------------------- Running on Below Api 28 --------------------->");
-        OldPermissionHandler.checkPermission();
-        ever(_isExistingUser, (bool data) {
-          if (data) {
-            Get.toNamed('/splash');
-          }
-        });
+        selectWhatsAppType = availableWhatsAppTypes.first;
+        if (_buildVersion > 28) {
+          print(
+              "<--------------------- Running on Above Api 28 --------------------->");
+          _paths.addAll(await Utils.getPathForWaType(selectedWhatsAppType));
+          Api30PermissionHandler.checkPermission(url: _paths.first);
+          ever(_isExistingUser, (bool data) {
+            if (data) {
+              Get.toNamed('/splash');
+            }
+          });
+        } else {
+          print(
+              "<--------------------- Running on Below Api 28 --------------------->");
+          OldPermissionHandler.checkPermission();
+          ever(_isExistingUser, (bool data) {
+            if (data) {
+              Get.toNamed('/splash');
+            }
+          });
+        }
       }
     }
   }
@@ -193,8 +199,7 @@ class AppController extends GetxController {
         StorageHelper.markAsDarkModeEnable();
       }
     }
-
-    ever(_selectedWhatsAppType, (whatsappType) {
+    ever(_selectedWhatsAppType, (whatsappType) async {
       bool canAccess = false;
       for (AccessibleWATypeModel accessibleWATypeModel
           in Get.find<AdController>().accessibleWATypes) {
@@ -208,5 +213,8 @@ class AppController extends GetxController {
         DialogHelper.showUnlockTypeDialog();
       }
     });
+
+
   }
+
 }

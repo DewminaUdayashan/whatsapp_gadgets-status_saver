@@ -10,7 +10,9 @@ import 'platform_handle_helper.dart';
 class Utils {
   //
 
-  static Future<void> checkInstalledWhatsApps(int buildVersion) async {
+  static Future<List<WhatsAppType>> checkInstalledWhatsApps(
+      int buildVersion, {bool returnOnly= false}) async {
+    final List<WhatsAppType> list = <WhatsAppType>[];
     try {
       bool wa = await PlatformHandleHelper.ifAppInstalled('com.whatsapp');
       bool wa4b = await PlatformHandleHelper.ifAppInstalled('com.whatsapp.4b');
@@ -39,22 +41,29 @@ class Utils {
                 'storage/emulated/0/DualApp/WhatsApp/Media/.Statuses');
       }
 
-      if (wa) {
-        controller.addWhatsAppType(WhatsAppType.normal);
-      }
-      if (waDual) {
-        controller.addWhatsAppType(WhatsAppType.dual);
-      }
-      if (wa4b) {
-        controller.addWhatsAppType(WhatsAppType.w4b);
-      }
-      if (waGb) {
-        controller.addWhatsAppType(WhatsAppType.gb);
+      if(!returnOnly){
+        if (wa) {
+          controller.addWhatsAppType(WhatsAppType.normal);
+          list.add(WhatsAppType.normal);
+        }
+        if (waDual) {
+          controller.addWhatsAppType(WhatsAppType.dual);
+          list.add(WhatsAppType.dual);
+        }
+        if (wa4b) {
+          controller.addWhatsAppType(WhatsAppType.w4b);
+          list.add(WhatsAppType.w4b);
+        }
+        if (waGb) {
+          controller.addWhatsAppType(WhatsAppType.gb);
+          list.add(WhatsAppType.gb);
+        }
       }
     } catch (e, stack) {
       FirebaseCrashlytics.instance.log(e.toString());
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
+    return list;
   }
 
   static Future<int> isWaGBAvailable() async {

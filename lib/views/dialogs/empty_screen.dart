@@ -44,6 +44,17 @@ class EmptyScreen extends GetWidget<AppController> {
                 style: TextStyle(color: Colors.white),
               ),
             ),
+            const SizedBox(height: 15),
+            if (controller.selectedWhatsAppType == WhatsAppType.saved) ...[
+              TextButton(
+                onPressed: () {
+                  controller.setWhatsAppType =
+                      controller.availableWhatsAppTypes.first;
+                  controller.handleRefresh();
+                },
+                child: const Text('Back to Status'),
+              ),
+            ]
           ],
         ),
       ),

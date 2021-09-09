@@ -125,12 +125,15 @@ class ImageController extends GetxController {
     _selectedImageList.add(index);
   }
 
+
+  int _repeater = 0;
   Future<void> loadImages({
     String api30Path = whatsAppApi30,
     String path1 = whatsApp,
     String path2 = whatsApp2,
     bool fromDirectory = false,
   }) async {
+    print('images loading==============================>');
     _loading.value = true;
     update();
     _imageList.clear();
@@ -189,6 +192,13 @@ class ImageController extends GetxController {
       }
       _loading.value = false;
       update();
+      if(_imageList.isEmpty){
+        if(_repeater<2){
+          controller.handleRefresh();
+          _repeater++;
+        }
+      }
+      print('images loading==============================> ${_imageList.length}');
     }
   }
 

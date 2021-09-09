@@ -3,23 +3,24 @@ import 'package:facebook_audience_network/ad/ad_native.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:storage_access_framework/storage_access_framework.dart';
 import 'package:whatsapp_gadgets/constants/constants.dart';
+import 'package:whatsapp_gadgets/constants/controllers_instatnceses.dart';
 import 'package:whatsapp_gadgets/constants/whatsapp_types.dart';
 import 'package:whatsapp_gadgets/controllers/app_controller.dart';
 import 'package:whatsapp_gadgets/helpers/snack_helper.dart';
 import 'package:whatsapp_gadgets/helpers/storage_helper.dart';
+import 'package:whatsapp_gadgets/helpers/utils.dart';
 import 'package:whatsapp_gadgets/models/accessible_wa_type_model.dart';
 
 class AdController extends GetxController {
-  RxList<AccessibleWATypeModel> accessibleWATypes = <AccessibleWATypeModel>[
-    AccessibleWATypeModel(whatsAppType: WhatsAppType.normal.toString()),
-    AccessibleWATypeModel(whatsAppType: WhatsAppType.dual.toString()),
-    AccessibleWATypeModel(whatsAppType: WhatsAppType.saved.toString()),
-  ].obs;
+  RxList<AccessibleWATypeModel> accessibleWATypes =
+      <AccessibleWATypeModel>[].obs;
   final RxBool isInterstitialLoaded = false.obs;
   final RxBool isInterstitialVideoWatched = false.obs;
   final RxBool isTypeChangeDialogLoading = false.obs;
   final RxBool isUndeletedMessagesUnlocked = false.obs;
+  final RxBool isPremiumUnlocked = false.obs;
   late Map<String, dynamic> undeletedMessageState;
 
   Future<void> unlockUndeleteMessages() async {
@@ -31,6 +32,21 @@ class AdController extends GetxController {
     if (Get.isDialogOpen!) {
       Get.back();
     }
+    Get.toNamed('/messages');
+  }
+
+  Future<void> unlockPremium() async {
+    isTypeChangeDialogLoading.value = true;
+    isPremiumUnlocked.value = true;
+    accessibleWATypes.clear();
+    accessibleWATypes.addAll(allWATypes);
+    await Future.delayed(const Duration(seconds: 3));
+    isTypeChangeDialogLoading.value = false;
+    if (Get.isDialogOpen!) {
+      Get.back();
+    }
+    StorageHelper.saveUnlockedTypes(accessibleWATypes);
+    SnackHelper.unlockedByAd();
   }
 
   Future<void> addAccessibleWaType() async {
@@ -67,6 +83,7 @@ class AdController extends GetxController {
         // set false if you want to collapse the native ad view when the ad is loading
         expandAnimationDuraion: 300,
         //in milliseconds. Expands the adview with animation when ad is loaded
+
         listener: (result, value) {
           print("Native Ad: $result --> $value");
         },
@@ -140,9 +157,51 @@ class AdController extends GetxController {
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
+
+    final int? _buildVersion = await StorageAccessFramework.platformVersion;
+    if (_buildVersion != null) {
+      print('adding types //////////////////////////////');
+      final list =
+          await Utils.checkInstalledWhatsApps(_buildVersion, returnOnly: true);
+      if (list.isNotEmpty) {
+        accessibleWATypes
+            .add(AccessibleWATypeModel(whatsAppType: list.first.toString()));
+      } else {
+        accessibleWATypes.add(AccessibleWATypeModel(
+            whatsAppType: WhatsAppType.normal.toString()));
+      }
+      accessibleWATypes.add(
+          AccessibleWATypeModel(whatsAppType: WhatsAppType.dual.toString()));
+      accessibleWATypes.add(
+          AccessibleWATypeModel(whatsAppType: WhatsAppType.saved.toString()));
+    }
+    print("FIRST TYPE " + accessibleWATypes.first.whatsAppType);
     _loadUnlockedFeatures();
     _validateUnlockedFeatures();
   }
 }
+
+final allWATypes = [
+  AccessibleWATypeModel(
+    whatsAppType: WhatsAppType.normal.toString(),
+    updatedAt: DateTime.now().toString(),
+  ),
+  AccessibleWATypeModel(
+    whatsAppType: WhatsAppType.dual.toString(),
+    updatedAt: DateTime.now().toString(),
+  ),
+  AccessibleWATypeModel(
+    whatsAppType: WhatsAppType.w4b.toString(),
+    updatedAt: DateTime.now().toString(),
+  ),
+  AccessibleWATypeModel(
+    whatsAppType: WhatsAppType.gb.toString(),
+    updatedAt: DateTime.now().toString(),
+  ),
+  AccessibleWATypeModel(
+    whatsAppType: WhatsAppType.saved.toString(),
+    updatedAt: DateTime.now().toString(),
+  ),
+];

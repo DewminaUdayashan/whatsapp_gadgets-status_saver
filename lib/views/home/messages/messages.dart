@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp_gadgets/constants/constants.dart';
 import 'package:whatsapp_gadgets/constants/texts.dart';
+import 'package:whatsapp_gadgets/controllers/ad_controller.dart';
 import 'package:whatsapp_gadgets/controllers/messages_controller.dart';
 import 'package:whatsapp_gadgets/views/home/messages/contact_messages_tab.dart';
 import 'package:whatsapp_gadgets/views/home/messages/group_messages_tab.dart';
@@ -47,10 +48,24 @@ class MessagesScreen extends GetWidget<MessageController> {
               ],
             ),
           ),
-          body: const TabBarView(
+          body: Stack(
             children: [
-              ContactMessagesTab(),
-              GroupMessagesTab(),
+              const Padding(
+                padding: EdgeInsets.only(bottom: 53),
+                child: TabBarView(
+                  children: [
+                    ContactMessagesTab(),
+                    GroupMessagesTab(),
+                  ],
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: 53,
+                child: Get.find<AdController>().mainTopNativeBannerAd(context),
+              ),
             ],
           ),
         ),

@@ -27,9 +27,10 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
     FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
     await GetStorage.init();
-    FacebookAudienceNetwork.init(
-      testingId: "93844ac8-5f8f-4abd-9588-b3bb99a9cae9",
-    );
+    // AdSettings.addTestDevice("d00e0a8a-7054-47e2-b61a-f8d433d2ca9a");
+    // FacebookAudienceNetwork.init(
+    //   testingId: "d00e0a8a-7054-47e2-b61a-f8d433d2ca9a",
+    // );
     runApp(const MyApp());
   }, (error, stack) => FirebaseCrashlytics.instance.recordError(error, stack));
 }

@@ -14,7 +14,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   Future<void> _getToHome() async {
-    print('loading home');
     await Future.delayed(splashDuration);
     Get.offNamed('/home');
   }
@@ -31,16 +30,40 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance!.addPostFrameCallback((_){
-    //   Future.delayed(splashDuration,(){
-    //     Get.offNamed("/home");
-    //   });
-    // });
-    return Scaffold(
-      body: Center(
-        child: Icon(
-          Icons.whatshot,
-          color: Theme.of(context).accentColor,
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png',
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Hello there.!',
+                    textAlign: TextAlign.center,
+                    style: context.textTheme.headline6!.copyWith(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: LinearProgressIndicator(
+                backgroundColor: context.theme.scaffoldBackgroundColor,
+                color: lightGreen,
+                minHeight: 7,
+              ),
+            ),
+          ],
         ),
       ),
     );

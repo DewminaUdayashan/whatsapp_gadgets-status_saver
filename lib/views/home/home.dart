@@ -8,6 +8,7 @@ import 'package:whatsapp_gadgets/controllers/app_controller.dart';
 import 'package:whatsapp_gadgets/controllers/image_controller.dart';
 import 'package:whatsapp_gadgets/controllers/page_view_controller.dart';
 import 'package:whatsapp_gadgets/controllers/video_controller.dart';
+import 'package:whatsapp_gadgets/helpers/utils.dart';
 import 'package:whatsapp_gadgets/views/home/pages/custom_drawer.dart';
 import 'package:whatsapp_gadgets/views/home/pages/image_list_page.dart';
 import 'package:whatsapp_gadgets/views/home/pages/video_list_page.dart';
@@ -73,7 +74,10 @@ class Home extends GetWidget<PageViewController> {
                           ),
                         ],
                       ),
-                      Get.find<AdController>().mainTopNativeBannerAd(context),
+                      SizedBox(
+                          height: 52,
+                          child: Get.find<AdController>()
+                              .mainTopNativeBannerAd(context)),
                     ],
                   ),
                   Positioned(
@@ -259,10 +263,18 @@ class Home extends GetWidget<PageViewController> {
                                     onPressed: () {
                                       vc.selectedVideoList.isNotEmpty
                                           ? vc.shareVideo(
-                                              package: 'com.whatsapp',
+                                              package: Utils
+                                                  .getPackageNameForWaType(Get
+                                                          .find<AppController>()
+                                                      .availableWhatsAppTypes
+                                                      .first),
                                             )
                                           : pc.shareImage(
-                                              package: 'com.whatsapp',
+                                              package: Utils
+                                                  .getPackageNameForWaType(Get
+                                                          .find<AppController>()
+                                                      .availableWhatsAppTypes
+                                                      .first),
                                             );
                                     },
                                     child: const FaIcon(

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:whatsapp_gadgets/constants/controllers_instatnceses.dart';
+import 'package:whatsapp_gadgets/views/dialogs/no_any_paths_found_dialog.dart';
 import 'package:whatsapp_gadgets/views/dialogs/unlock_type_dialog.dart';
 import 'package:whatsapp_gadgets/views/dialogs/ask_notification_permission_dialog.dart';
 import 'package:whatsapp_gadgets/views/dialogs/change_wa_type_dialog.dart';
@@ -44,8 +45,11 @@ class DialogHelper {
 
   static void showUnlockTypeDialog() async {
     await Future.delayed(const Duration(seconds: 2));
-    Get.dialog(const UnlockTypeDialog(),
-        barrierDismissible: false, name: "Type_Unlock_Dialog");
+    Get.dialog(
+      const UnlockTypeDialog(),
+      barrierDismissible: false,
+      name: "Type_Unlock_Dialog",
+    );
   }
 
   static void showUnlockUndeletedMessageDialog() async {
@@ -55,5 +59,9 @@ class DialogHelper {
         ),
         barrierDismissible: false,
         name: "Type_Unlock_Dialog");
+  }
+
+  static void noAnyPathsFoundDialog() {
+    Get.dialog(const NoAnyPathsFoundDialog());
   }
 }

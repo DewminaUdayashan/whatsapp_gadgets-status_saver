@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:whatsapp_gadgets/controllers/ad_controller.dart';
 import 'package:whatsapp_gadgets/controllers/image_controller.dart';
 import 'package:whatsapp_gadgets/controllers/video_controller.dart';
 

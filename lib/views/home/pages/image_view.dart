@@ -123,65 +123,49 @@ class _ImageViewState extends State<ImageView> {
                             controller.shareImage();
                           },
                         ),
-                        if (Get.find<AppController>()
-                                .availableWhatsAppTypes
-                                .length ==
-                            1) ...[
-                          IconButton(
-                            color: constants.lightGreen,
-                            icon: const FaIcon(
-                              FontAwesomeIcons.whatsapp,
-                            ),
-                            onPressed: () => controller.shareImage(
-                              package: 'com.whatsapp',
-                            ),
+                        SpeedDial(
+                          icon: FontAwesomeIcons.whatsapp,
+                          iconTheme: const IconThemeData(
+                            color: Colors.greenAccent,
                           ),
-                        ] else ...[
-                          SpeedDial(
-                            icon: FontAwesomeIcons.whatsapp,
-                            iconTheme: const IconThemeData(
-                              color: Colors.greenAccent,
-                            ),
-                            elevation: 0,
-                            activeIcon: Icons.close,
-                            backgroundColor: Colors.transparent,
-                            activeBackgroundColor:
-                                Colors.black12.withOpacity(.3),
-                            overlayColor: Colors.black.withOpacity(.2),
-                            openCloseDial: isDialOpen,
-                            spaceBetweenChildren: 14,
-                            children: [
-                              for (var type in waTypes)
-                                SpeedDialChild(
-                                  backgroundColor:
-                                      Utils.getColorForWaType(type),
-                                  onTap: () {
-                                    controller.shareImage(
-                                      package:
-                                          Utils.getPackageNameForWaType(type),
-                                    );
-                                  },
-                                  label: Utils.getNameForWaType(type),
-                                  labelBackgroundColor:
-                                      context.theme.canvasColor,
-                                  labelStyle: context.theme.textTheme.headline6!
-                                      .copyWith(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.normal,
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                                  child:
-                                      const FaIcon(FontAwesomeIcons.whatsapp),
+                          elevation: 0,
+                          activeIcon: Icons.close,
+                          backgroundColor: Colors.transparent,
+                          activeBackgroundColor: Colors.black12.withOpacity(.3),
+                          overlayColor: Colors.black.withOpacity(.2),
+                          openCloseDial: isDialOpen,
+                          spaceBetweenChildren: 14,
+                          children: [
+                            for (var type in waTypes)
+                              SpeedDialChild(
+                                backgroundColor: Utils.getColorForWaType(type),
+                                onTap: () {
+                                  controller.shareImage(
+                                    package:
+                                        Utils.getPackageNameForWaType(type),
+                                  );
+                                },
+                                label: Utils.getNameForWaType(type),
+                                labelBackgroundColor: context.theme.canvasColor,
+                                labelStyle:
+                                    context.theme.textTheme.headline6!.copyWith(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.normal,
+                                  fontStyle: FontStyle.italic,
                                 ),
-                            ],
-                          ),
-                        ],
+                                child: const FaIcon(FontAwesomeIcons.whatsapp),
+                              ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
-              Get.find<AdController>().mainTopNativeBannerAd(context),
+              SizedBox(
+                  height: 52,
+                  child:
+                      Get.find<AdController>().mainTopNativeBannerAd(context)),
             ],
           ),
         ),
