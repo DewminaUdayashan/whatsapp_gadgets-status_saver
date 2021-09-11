@@ -2,13 +2,11 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:whatsapp_gadgets/constants/constants.dart';
-import 'package:whatsapp_gadgets/constants/controllers_instatnceses.dart';
+import 'package:whatsapp_gadgets/constants/controllers_instance.dart';
 import 'package:whatsapp_gadgets/helpers/function_helper.dart';
 import 'package:whatsapp_gadgets/helpers/snack_helper.dart';
 import 'package:storage_access_framework/storage_access_framework.dart';
@@ -20,8 +18,6 @@ class VideoController extends GetxController {
   final RxList<Uint8List> _thumbnails =
       List<Uint8List>.empty(growable: true).obs;
   final _selectedVideoList = List<int>.empty(growable: true).obs;
-  final GlobalKey<LiquidPullToRefreshState> refreshIndicatorKey =
-      GlobalKey<LiquidPullToRefreshState>();
   final RxBool _loading = true.obs;
 
   bool get isLoading => _loading.value;
@@ -108,9 +104,8 @@ class VideoController extends GetxController {
     }
   }
 
-  Future<void> handleRefresh() {
-    controller.handleRefresh();
-    return Future<Null>(() {});
+  Future<void> handleRefresh() async {
+    return await controller.handleRefresh();
   }
 
   void selectVideo(int index) {
@@ -211,9 +206,5 @@ class VideoController extends GetxController {
     }
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    loadVideos();
-  }
+
 }

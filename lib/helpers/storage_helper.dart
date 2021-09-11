@@ -1,10 +1,7 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:whatsapp_gadgets/constants/constants.dart';
-import 'package:get/get.dart';
-import 'package:whatsapp_gadgets/controllers/ad_controller.dart';
 import 'package:whatsapp_gadgets/models/accessible_wa_type_model.dart';
 
 final storage = GetStorage();
@@ -77,5 +74,19 @@ class StorageHelper {
         storage.read<Map>(messageFeatureUnlockedState) ??
             {"status": false, "updatedAt": "null"});
     return map;
+  }
+
+  static Map<String, dynamic> getFeatures() {
+    final Map<String, dynamic> map = Map<String, dynamic>.from(
+        storage.read<Map>(featuresKey) ??
+            {"unlocked": false, "updatedAt": "null"});
+    return map;
+  }
+
+  static void saveFeatureState(bool state) {
+    storage.write(featuresKey, <String, dynamic>{
+      "unlocked": state,
+      "updatedAt": DateTime.now().toString(),
+    });
   }
 }

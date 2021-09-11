@@ -1,7 +1,6 @@
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:octo_image/octo_image.dart';
 import 'package:whatsapp_gadgets/constants/constants.dart';
 import 'package:whatsapp_gadgets/controllers/video_controller.dart';
@@ -13,18 +12,14 @@ class VideoListPage extends GetWidget<VideoController> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: LiquidPullToRefresh(
-            key: controller.refreshIndicatorKey,
-            color: lightGreen,
-            height: Get.height / 3,
-            showChildOpacityTransition: false,
-            borderWidth: 5,
-            onRefresh: () async {
-              return controller.handleRefresh();
-            },
+    return RefreshIndicator(
+      onRefresh: controller.handleRefresh,
+      backgroundColor: lightGreen,
+      color: Colors.white,
+      strokeWidth: 3,
+      child: Column(
+        children: [
+          Expanded(
             child: Obx(
               () => controller.isLoading
                   ? const Center(
@@ -183,11 +178,11 @@ class VideoListPage extends GetWidget<VideoController> {
                         ),
             ),
           ),
-        ),
-        SizedBox(
-          height: Get.height / 10,
-        ),
-      ],
+          SizedBox(
+            height: Get.height / 10,
+          ),
+        ],
+      ),
     );
   }
 }

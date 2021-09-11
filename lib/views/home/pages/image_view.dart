@@ -27,10 +27,14 @@ class _ImageViewState extends State<ImageView> {
   @override
   void initState() {
     super.initState();
-    waTypes.addAll(Get.find<AppController>().availableWhatsAppTypes);
+    waTypes.addAll(
+        Get.find<AppController>().availableWhatsAppTypes.toSet().toList());
     if (waTypes.contains(WhatsAppType.normal) &&
         waTypes.contains(WhatsAppType.dual)) {
       waTypes.remove(WhatsAppType.dual);
+    }
+    if (waTypes.contains(WhatsAppType.saved)) {
+      waTypes.remove(WhatsAppType.saved);
     }
   }
 

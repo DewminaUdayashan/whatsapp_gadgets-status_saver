@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:whatsapp_gadgets/constants/constants.dart';
 
 class Themes {
-  late var t;
-
   static final theme = ThemeData.light().copyWith(
       scaffoldBackgroundColor: Colors.white,
       accentColor: darkGrey,

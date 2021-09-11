@@ -18,7 +18,6 @@ class MessageController extends GetxController {
     ListenWhatsapp.startService();
     final List<Map<String, dynamic>> list = await ListenWhatsapp.getSenders();
     for (final map in list) {
-      print(map);
       senders.add(SenderModel.fromJson(map));
     }
     senders.sort((a, b) => a.date.compareTo(b.date));

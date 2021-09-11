@@ -15,13 +15,12 @@ import 'package:whatsapp_gadgets/helpers/snack_helper.dart';
 import 'package:whatsapp_gadgets/helpers/storage_helper.dart';
 import 'package:whatsapp_gadgets/helpers/utils.dart';
 import 'package:storage_access_framework/storage_access_framework.dart';
-import 'package:whatsapp_gadgets/models/accessible_wa_type_model.dart';
 
 class AppController extends GetxController {
   final notificationController = NotificationController();
   final RxBool _isExistingUser = false.obs;
   final List<WhatsAppType> _availableWhatsAppTypes =
-      List<WhatsAppType>.empty(growable: true);
+  List<WhatsAppType>.empty(growable: true);
   final Rx<WhatsAppType> _selectedWhatsAppType = WhatsAppType.normal.obs;
   final RxBool _darkMode = false.obs;
   final RxBool _notificationEnable = true.obs;
@@ -49,7 +48,9 @@ class AppController extends GetxController {
   //Available WA Types
   List<WhatsAppType> get availableWhatsAppTypes => _availableWhatsAppTypes;
 
-  void addWhatsAppType(WhatsAppType type) => _availableWhatsAppTypes.add(type);
+  void addWhatsAppType(WhatsAppType type) =>
+      _availableWhatsAppTypes.addIf(
+          !_availableWhatsAppTypes.contains(type), type);
 
   //*
 
@@ -112,13 +113,13 @@ class AppController extends GetxController {
     final int? _buildVersion = await StorageAccessFramework.platformVersion;
     if (_buildVersion != null) {
       await Utils.checkInstalledWhatsApps(_buildVersion, returnOnly: false);
-      if (availableWhatsAppTypes.isEmpty) {
+      if (availableWhatsAppTypes.length==1) {
         DialogHelper.noAnyPathsFoundDialog();
       } else {
         selectWhatsAppType = availableWhatsAppTypes.first;
         if (_buildVersion > 28) {
-          print(
-              "<--------------------- Running on Above Api 28 --------------------->");
+          // print(
+          //     "<--------------------- Running on Above Api 28 --------------------->");
           _paths.addAll(await Utils.getPathForWaType(selectedWhatsAppType));
           Api30PermissionHandler.checkPermission(url: _paths.first);
           ever(_isExistingUser, (bool data) {
@@ -127,8 +128,8 @@ class AppController extends GetxController {
             }
           });
         } else {
-          print(
-              "<--------------------- Running on Below Api 28 --------------------->");
+          // print(
+          //     "<--------------------- Running on Below Api 28 --------------------->");
           OldPermissionHandler.checkPermission();
           ever(_isExistingUser, (bool data) {
             if (data) {
@@ -179,7 +180,7 @@ class AppController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+// StorageAccessFramework.getFileStream(uri: uri)
     notificationController.initialize();
     if (StorageHelper.isWelcomed()) {
       setWelcomed = false;
@@ -200,21 +201,24 @@ class AppController extends GetxController {
       }
     }
     ever(_selectedWhatsAppType, (whatsappType) async {
-      bool canAccess = false;
-      for (AccessibleWATypeModel accessibleWATypeModel
-          in Get.find<AdController>().accessibleWATypes) {
-        if (accessibleWATypeModel.whatsAppType == whatsappType.toString()) {
-          canAccess = true;
-          return;
+      if (Get
+          .find<AdController>()
+          .isPremiumUnlocked
+          .isFalse) {
+        bool canAccess = false;
+        for (WhatsAppType type in Get
+            .find<AdController>()
+            .accessibleWATypes) {
+          if (type == whatsappType) {
+            canAccess = true;
+            return;
+          }
+          canAccess = false;
         }
-        canAccess = false;
-      }
-      if (!canAccess) {
-        DialogHelper.showUnlockTypeDialog();
+        if (!canAccess) {
+          DialogHelper.showUnlockTypeDialog();
+        }
       }
     });
-
-
   }
-
 }

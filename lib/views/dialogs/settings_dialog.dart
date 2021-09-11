@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp_gadgets/constants/controllers_instatnceses.dart';
+import 'package:whatsapp_gadgets/constants/controllers_instance.dart';
 import 'package:whatsapp_gadgets/helpers/storage_helper.dart';
 
 class SettingsDialog extends StatelessWidget {

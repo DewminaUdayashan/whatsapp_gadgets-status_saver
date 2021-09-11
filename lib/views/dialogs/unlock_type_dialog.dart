@@ -47,11 +47,7 @@ class UnlockTypeDialog extends GetWidget<AdController> {
                   Obx(
                     () => TextButton(
                       onPressed: () {
-                        if (!forUnlockMessages) {
-                          controller.addAccessibleWaType();
-                        } else {
-                          controller.unlockUndeleteMessages();
-                        }
+                        controller.unlockPremium(forUnlockMessages);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.green,
@@ -70,26 +66,26 @@ class UnlockTypeDialog extends GetWidget<AdController> {
                             ),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Text(
-                    '- OR -',
-                    style: context.theme.textTheme.headline5!.copyWith(
-                      fontSize: 12,
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  TextButton(
-                    onPressed: () {},
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.yellow[900],
-                    ),
-                    child: const Text(
-                      "Premium",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+                  // const SizedBox(width: 16),
+                  // Text(
+                  //   '- OR -',
+                  //   style: context.theme.textTheme.headline5!.copyWith(
+                  //     fontSize: 12,
+                  //   ),
+                  // ),
+                  // const SizedBox(width: 16),
+                  // TextButton(
+                  //   onPressed: () {},
+                  //   style: TextButton.styleFrom(
+                  //     backgroundColor: Colors.yellow[900],
+                  //   ),
+                  //   child: const Text(
+                  //     "Premium",
+                  //     style: TextStyle(
+                  //       color: Colors.white,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               )
             ],

@@ -41,7 +41,9 @@ class _SplashScreenState extends State<SplashScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Image.asset(
-                    'android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png',
+                    'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png',
+                    width: Get.width / 2,
+                    height: Get.width / 2,
                   ),
                   const SizedBox(height: 16),
                   Text(

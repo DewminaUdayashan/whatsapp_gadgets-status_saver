@@ -1,7 +1,5 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:better_player/better_player.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
@@ -12,6 +10,7 @@ import 'package:whatsapp_gadgets/constants/whatsapp_types.dart';
 import 'package:whatsapp_gadgets/controllers/app_controller.dart';
 import 'package:whatsapp_gadgets/controllers/video_controller.dart';
 import 'package:whatsapp_gadgets/controllers/video_player_controller.dart';
+import 'package:whatsapp_gadgets/helpers/snack_helper.dart';
 import 'package:whatsapp_gadgets/helpers/utils.dart';
 
 class VideoView extends StatefulWidget {
@@ -37,6 +36,9 @@ class _VideoViewState extends State<VideoView> {
     if (waTypes.contains(WhatsAppType.normal) &&
         waTypes.contains(WhatsAppType.dual)) {
       waTypes.remove(WhatsAppType.dual);
+    }
+    if (waTypes.contains(WhatsAppType.saved)) {
+      waTypes.remove(WhatsAppType.saved);
     }
 
     betterPlayerController = BetterPlayerPlaylistController(
@@ -93,15 +95,19 @@ class _VideoViewState extends State<VideoView> {
               onOpen: () {
                 try {
                   betterPlayerController.betterPlayerController!.pause();
-                } catch (e) {
-                  print(e);
+                } catch (e, stack) {
+                  FirebaseCrashlytics.instance.log(e.toString());
+                  FirebaseCrashlytics.instance.recordError(e, stack);
+                  SnackHelper.saveError();
                 }
               },
               onClose: () {
                 try {
                   betterPlayerController.betterPlayerController!.play();
-                } catch (e) {
-                  print(e);
+                } catch (e,stack) {
+                  FirebaseCrashlytics.instance.log(e.toString());
+                  FirebaseCrashlytics.instance.recordError(e, stack);
+                  SnackHelper.saveError();
                 }
               },
               children: [

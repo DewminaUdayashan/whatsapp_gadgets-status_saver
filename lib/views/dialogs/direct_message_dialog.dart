@@ -137,7 +137,6 @@ class DirectMessageDialog extends StatelessWidget {
                     final number = _number.text.replaceAll("+", "").trim();
                     final message = _message.text;
                     final url = "https://wa.me/$number?text=$message";
-                    print('Number ============> $number');
                     if (await canLaunch(url)) {
                       await launch(url);
                     } else {

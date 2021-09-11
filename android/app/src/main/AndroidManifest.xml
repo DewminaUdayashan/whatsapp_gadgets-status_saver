@@ -21,7 +21,7 @@
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="WhatsApp Gadgets - Status Saver">
+        android:label="WhatsGadgets - Status Saver">
         <activity
             android:name="dewz.whatsapp.status.status_saver.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

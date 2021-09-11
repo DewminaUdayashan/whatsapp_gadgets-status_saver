@@ -1,24 +1,12 @@
-import 'dart:io';
-
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:listen_whatsapp/listen_whatsapp.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_gadgets/constants/constants.dart';
 import 'package:whatsapp_gadgets/constants/texts.dart';
-import 'package:whatsapp_gadgets/constants/whatsapp_types.dart';
 import 'package:whatsapp_gadgets/controllers/ad_controller.dart';
-import 'package:whatsapp_gadgets/controllers/app_controller.dart';
-import 'package:whatsapp_gadgets/controllers/image_controller.dart';
-import 'package:whatsapp_gadgets/controllers/notification_controller.dart';
-import 'package:whatsapp_gadgets/controllers/video_controller.dart';
 import 'package:whatsapp_gadgets/helpers/dialog_helper.dart';
-import 'package:whatsapp_gadgets/helpers/snack_helper.dart';
-import 'package:whatsapp_gadgets/helpers/storage_helper.dart';
-import 'package:whatsapp_gadgets/views/home/home.dart';
+import 'package:whatsapp_gadgets/views/home/pages/widgets/contact_us_button.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -37,7 +25,9 @@ class CustomDrawer extends StatelessWidget {
                   height: kToolbarHeight / 1.7,
                 ),
                 Image.asset(
-                  'android/app/src/main/res/mipmap-hdpi/ic_launcher.png',
+                  'android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png',
+                  width: Get.width / 3,
+                  height: Get.width / 3,
                 ),
                 const SizedBox(
                   height: 16,
@@ -54,27 +44,28 @@ class CustomDrawer extends StatelessWidget {
                   color: Colors.grey,
                 ),
                 DrawerButton(
-                    title: changeType,
-                    onTap: () => DialogHelper.changeWaTypeDialog()),
-                DrawerButton(
-                  title: viewSaved,
-                  color: Colors.green,
-                  onTap: () {
-                    Get.find<AppController>().selectWhatsAppType =
-                        WhatsAppType.saved;
-                    Get.find<ImageController>().loadImages(
-                      fromDirectory: true,
-                      path1: savedDirectory,
-                    );
-                    Get.find<VideoController>().loadVideos(
-                      fromDirectory: true,
-                      path1: savedDirectory,
-                    );
-                    if (Home.getScaffoldKey.currentState!.isDrawerOpen) {
-                      Get.back();
-                    }
-                  },
+                  title: changeType,
+                  onTap: () => DialogHelper.changeWaTypeDialog(),
                 ),
+                // DrawerButton(
+                //   title: viewSaved,
+                //   color: Colors.green,
+                //   onTap: () {
+                //     Get.find<AppController>().selectWhatsAppType =
+                //         WhatsAppType.saved;
+                //     Get.find<ImageController>().loadImages(
+                //       fromDirectory: true,
+                //       path1: savedDirectory,
+                //     );
+                //     Get.find<VideoController>().loadVideos(
+                //       fromDirectory: true,
+                //       path1: savedDirectory,
+                //     );
+                //     if (Home.getScaffoldKey.currentState!.isDrawerOpen) {
+                //       Get.back();
+                //     }
+                //   },
+                // ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -83,7 +74,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 DrawerButton(
                   title: sendDirectMessage,
-                  color: tealGreen,
+                  color: Colors.blueGrey,
                   onTap: () {
                     DialogHelper.directMessageDialog();
                   },
@@ -95,9 +86,7 @@ class CustomDrawer extends StatelessWidget {
                     final permission =
                         await ListenWhatsapp.checkIsServiceEnabled();
                     if (permission) {
-                      if (Get.find<AdController>()
-                          .isUndeletedMessagesUnlocked
-                          .value) {
+                      if (Get.find<AdController>().isPremiumUnlocked.value) {
                         Get.toNamed("/messages");
                       } else {
                         DialogHelper.showUnlockUndeletedMessageDialog();
@@ -126,44 +115,7 @@ class CustomDrawer extends StatelessWidget {
                           color: context.theme.iconTheme.color,
                         ),
                       ),
-                      Expanded(
-                        child: IconButton(
-                          onPressed: () async {
-                            try {
-                              const number = '+94787693462';
-                              const message = "";
-                              const url = "https://wa.me/$number?text=$message";
-                              if (await canLaunch(url)) {
-                                await launch(url);
-                              } else {
-                                SnackHelper.contactError();
-                              }
-                            } catch (e, stack) {
-                              SnackHelper.contactError();
-                              FirebaseCrashlytics.instance.log(e.toString());
-                              FirebaseCrashlytics.instance
-                                  .recordError(e, stack);
-                            }
-                          },
-                          icon: Row(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.whatsapp,
-                                color: context.theme.iconTheme.color,
-                              ),
-                              const SizedBox(width: 5),
-                              Text(
-                                "Contact Us",
-                                style:
-                                    context.theme.textTheme.headline6!.copyWith(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
+                      const Expanded(child: ContactUsButton()),
                     ],
                   ),
                 ),
@@ -187,6 +139,32 @@ class CustomDrawer extends StatelessWidget {
                               const SizedBox(width: 5),
                               Text(
                                 "Share",
+                                style:
+                                    context.theme.textTheme.headline6!.copyWith(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: IconButton(
+                          onPressed: () {
+                            DialogHelper.whyAdsDialog();
+                          },
+                          icon: Row(
+                            children: [
+                              Text(
+                                "why ads?",
                                 style:
                                     context.theme.textTheme.headline6!.copyWith(
                                   fontWeight: FontWeight.normal,

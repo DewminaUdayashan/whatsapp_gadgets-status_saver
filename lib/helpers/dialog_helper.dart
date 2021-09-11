@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
-import 'package:whatsapp_gadgets/constants/controllers_instatnceses.dart';
+import 'package:whatsapp_gadgets/constants/controllers_instance.dart';
+import 'package:whatsapp_gadgets/views/dialogs/exit_dialog.dart';
 import 'package:whatsapp_gadgets/views/dialogs/no_any_paths_found_dialog.dart';
 import 'package:whatsapp_gadgets/views/dialogs/unlock_type_dialog.dart';
 import 'package:whatsapp_gadgets/views/dialogs/ask_notification_permission_dialog.dart';
@@ -8,6 +9,7 @@ import 'package:whatsapp_gadgets/views/dialogs/direct_message_dialog.dart';
 import 'package:whatsapp_gadgets/views/dialogs/permission_asking_dialog.dart';
 import 'package:whatsapp_gadgets/views/dialogs/settings_dialog.dart';
 import 'package:whatsapp_gadgets/views/dialogs/welcome_dialog.dart';
+import 'package:whatsapp_gadgets/views/dialogs/why_ads.dart';
 
 class DialogHelper {
   static void permissionDialogApi30({Function? overrideDefaultFunction}) {
@@ -63,5 +65,13 @@ class DialogHelper {
 
   static void noAnyPathsFoundDialog() {
     Get.dialog(const NoAnyPathsFoundDialog());
+  }
+
+  static void whyAdsDialog() {
+    Get.dialog(const WhyAds());
+  }
+
+  static void exitDialog() {
+    Get.dialog(const ExitDialog());
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp_gadgets/constants/controllers_instatnceses.dart';
+import 'package:whatsapp_gadgets/constants/controllers_instance.dart';
 import 'package:whatsapp_gadgets/constants/whatsapp_types.dart';
 import 'package:whatsapp_gadgets/controllers/app_controller.dart';
 

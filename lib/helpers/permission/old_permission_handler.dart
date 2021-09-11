@@ -1,9 +1,7 @@
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:whatsapp_gadgets/constants/constants.dart';
-import 'package:whatsapp_gadgets/constants/controllers_instatnceses.dart';
+import 'package:whatsapp_gadgets/constants/controllers_instance.dart';
 import 'package:whatsapp_gadgets/helpers/snack_helper.dart';
-import 'package:whatsapp_gadgets/helpers/utils.dart';
 
 class OldPermissionHandler {
   static Future<void> checkPermission() async {

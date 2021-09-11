@@ -1,5 +1,7 @@
 import 'dart:typed_data';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:storage_access_framework/storage_access_framework.dart';
+import 'package:whatsapp_gadgets/helpers/snack_helper.dart';
 
 class FunctionHelper {
   static Future<bool> saveImage({
@@ -17,10 +19,11 @@ class FunctionHelper {
           bytesList: send, mimeType: type);
       selectedList.clear();
       // SnackHelper.savedSnack();
-    } catch (e) {
+    } catch (e, stack) {
       isSaved = false;
-      print(e);
-      // TODO: ERROR SNACK WITH CONTACT US
+      FirebaseCrashlytics.instance.log(e.toString());
+      FirebaseCrashlytics.instance.recordError(e, stack);
+      SnackHelper.saveError();
     }
     return isSaved;
   }

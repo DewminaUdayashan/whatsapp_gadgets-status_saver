@@ -8,6 +8,7 @@ import 'package:whatsapp_gadgets/controllers/app_controller.dart';
 import 'package:whatsapp_gadgets/controllers/image_controller.dart';
 import 'package:whatsapp_gadgets/controllers/page_view_controller.dart';
 import 'package:whatsapp_gadgets/controllers/video_controller.dart';
+import 'package:whatsapp_gadgets/helpers/dialog_helper.dart';
 import 'package:whatsapp_gadgets/helpers/utils.dart';
 import 'package:whatsapp_gadgets/views/home/pages/custom_drawer.dart';
 import 'package:whatsapp_gadgets/views/home/pages/image_list_page.dart';
@@ -19,6 +20,8 @@ const homePages = <Widget>[
 ];
 
 class Home extends GetWidget<PageViewController> {
+  Home({Key? key}) : super(key: key);
+
   final ImageController pc = Get.find<ImageController>();
   final VideoController vc = Get.find<VideoController>();
   static final GlobalKey<ScaffoldState> _scaffoldKey =
@@ -42,7 +45,7 @@ class Home extends GetWidget<PageViewController> {
         } else if (vc.selectedVideoList.isNotEmpty) {
           vc.selectedVideoList.clear();
         } else {
-          // Get.dialog(Exit()); TODO: EXIT DIALOG
+          DialogHelper.exitDialog();
         }
         return Future.value(false);
       },
@@ -174,7 +177,7 @@ class Home extends GetWidget<PageViewController> {
                                               () => controller.currentPage == 1
                                                   ? Text(
                                                       '${vc.getVideos.length}',
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 7,
                                                       ),

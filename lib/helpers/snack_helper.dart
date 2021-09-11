@@ -51,6 +51,30 @@ class SnackHelper {
     );
   }
 
+  static void saveError() {
+    Get.rawSnackbar(
+      backgroundColor: Colors.amber,
+      icon: const Icon(
+        Icons.error_outline_outlined,
+        color: Colors.black,
+      ),
+      titleText: const Text(
+        'Something Went Wrong..',
+        style: TextStyle(fontWeight: FontWeight.w700),
+      ),
+      messageText: const Text(
+          "Please send bug report if you think this is a bug in a application."),
+      duration: const Duration(seconds: 6),
+      mainButton: TextButton(
+        onPressed: () {
+          FirebaseCrashlytics.instance.log("User send log");
+        },
+        child: const Text(reportBug),
+      ),
+      snackPosition: SnackPosition.TOP,
+    );
+  }
+
   static void cantSendMessage({String? err}) {
     Get.rawSnackbar(
       backgroundColor: Colors.amber,

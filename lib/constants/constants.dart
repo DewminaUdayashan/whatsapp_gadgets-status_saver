@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:whatsapp_gadgets/controllers/app_controller.dart';
 
 const Duration splashDuration = Duration(milliseconds: 2500);
 final Color darkGrey = Colors.grey[900]!;
@@ -49,6 +47,7 @@ const notificationEnabledKey = "NOTIFICATION_ENABLED_KEY_@#@132453";
 const saveUnlockedTypesKey = "UNLOCKED_TYPES_GET_KEY_SAVE_@#!@2314-0/";
 const messageFeatureUnlockedState =
     "MESSAGE_FEATURE_UNLOCKED_STATE_@#!#!Key+GEt";
+const featuresKey = "FEATURES_STORAGE_KEY_@!43F2d2114";
 
 const durationOneWeek = Duration(days: 7);
 

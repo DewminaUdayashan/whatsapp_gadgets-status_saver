@@ -21,7 +21,7 @@ const messages2 = "WhatsApp UnDeleted";
 const welcome = "Welcome to WhatsApp Gadgets";
 const welcome2 = "All in One Status Saver\n🔥";
 const welcome3 =
-    "Hi..👋 Let me give you a little guide. There is lot of things you can do with this app.";
+    "Hi..👋 Let me give you a little guide. There are lot of things you can do with this app.";
 const welcome4 = "\n🔹 Tap on image or video to view it."
     "\n🔹 Long tap on image or video to select it."
     "\n🔹 For more features, tap on the bottom left button to open side menu."

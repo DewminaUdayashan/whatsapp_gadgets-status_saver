@@ -1,4 +1,3 @@
-import 'package:whatsapp_gadgets/constants/whatsapp_types.dart';
 
 class AccessibleWATypeModel {
   String whatsAppType;

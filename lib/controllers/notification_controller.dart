@@ -54,7 +54,7 @@ class NotificationController {
 
   void initialize() {
     const androidInitialize =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('noti');
     const initializationSettings = InitializationSettings(
       android: androidInitialize,
     );

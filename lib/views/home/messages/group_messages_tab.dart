@@ -4,7 +4,6 @@ import 'package:whatsapp_gadgets/controllers/messages_controller.dart';
 import 'package:whatsapp_gadgets/views/home/messages/widgets/empty_widget.dart';
 import 'package:whatsapp_gadgets/views/home/messages/group_message_view.dart';
 
-import 'message_view.dart';
 import 'widgets/avatar.dart';
 
 class GroupMessagesTab extends GetWidget<MessageController> {

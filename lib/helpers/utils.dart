@@ -1,18 +1,18 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:whatsapp_gadgets/constants/constants.dart';
-import 'package:whatsapp_gadgets/constants/controllers_instatnceses.dart';
+import 'package:whatsapp_gadgets/constants/controllers_instance.dart';
 import 'package:whatsapp_gadgets/constants/whatsapp_types.dart';
-import 'package:whatsapp_gadgets/controllers/app_controller.dart';
+import 'package:whatsapp_gadgets/controllers/ad_controller.dart';
 import 'package:storage_access_framework/storage_access_framework.dart';
 import 'platform_handle_helper.dart';
 
 class Utils {
   //
 
-  static Future<List<WhatsAppType>> checkInstalledWhatsApps(
-      int buildVersion, {bool returnOnly= false}) async {
-    final List<WhatsAppType> list = <WhatsAppType>[];
+  static Future<void> checkInstalledWhatsApps(int buildVersion,
+      {bool returnOnly = false}) async {
     try {
       bool wa = await PlatformHandleHelper.ifAppInstalled('com.whatsapp');
       bool wa4b = await PlatformHandleHelper.ifAppInstalled('com.whatsapp.4b');
@@ -41,29 +41,36 @@ class Utils {
                 'storage/emulated/0/DualApp/WhatsApp/Media/.Statuses');
       }
 
-      if(!returnOnly){
-        if (wa) {
-          controller.addWhatsAppType(WhatsAppType.normal);
-          list.add(WhatsAppType.normal);
-        }
-        if (waDual) {
-          controller.addWhatsAppType(WhatsAppType.dual);
-          list.add(WhatsAppType.dual);
-        }
-        if (wa4b) {
-          controller.addWhatsAppType(WhatsAppType.w4b);
-          list.add(WhatsAppType.w4b);
-        }
-        if (waGb) {
-          controller.addWhatsAppType(WhatsAppType.gb);
-          list.add(WhatsAppType.gb);
-        }
+      AdController adController = Get.find<AdController>();
+
+      if (wa) {
+        controller.addWhatsAppType(WhatsAppType.normal);
+        adController.tempList.addIf(
+            !adController.tempList.contains(WhatsAppType.normal),
+            WhatsAppType.normal);
       }
+      if (waDual) {
+        controller.addWhatsAppType(WhatsAppType.dual);
+        adController.tempList.addIf(
+            !adController.tempList.contains(WhatsAppType.dual),
+            WhatsAppType.dual);
+      }
+      if (wa4b) {
+        controller.addWhatsAppType(WhatsAppType.w4b);
+        adController.tempList.addIf(
+            !adController.tempList.contains(WhatsAppType.w4b),
+            WhatsAppType.w4b);
+      }
+      if (waGb) {
+        controller.addWhatsAppType(WhatsAppType.gb);
+        adController.tempList.addIf(
+            !adController.tempList.contains(WhatsAppType.gb), WhatsAppType.gb);
+      }
+      controller.addWhatsAppType(WhatsAppType.saved);
     } catch (e, stack) {
       FirebaseCrashlytics.instance.log(e.toString());
       FirebaseCrashlytics.instance.recordError(e, stack);
     }
-    return list;
   }
 
   static Future<int> isWaGBAvailable() async {
@@ -130,14 +137,12 @@ class Utils {
       return null;
     } else {
       String decoded = '';
-      print('DECODED 1 $url');
       decoded +=
           url.replaceAll('content://com.android.externalstorage.documents', '');
       decoded = decoded.replaceAll('/tree/', '');
       // decoded += decoded.replaceAll('%3A', ':').replaceAll('%2F', '/');
       // decoded = decoded.replaceAll('/tree/', '');
       decoded = decoded.substring(0, decoded.length - 1);
-      print('DECODED URI =>> $decoded');
       return decoded;
     }
   }
@@ -162,6 +167,8 @@ class Utils {
     if (forList) {
       if (type == WhatsAppType.dual) {
         return 'Dual';
+      } else if (type == WhatsAppType.saved) {
+        return 'Saved Status';
       } else {
         return 'WhatsApp';
       }
@@ -175,9 +182,9 @@ class Utils {
       return Colors.green[300]!;
     }
     if (type == WhatsAppType.w4b) {
-      return Colors.lightGreenAccent;
+      return Colors.lightGreen[900]!;
     }
 
-    return Colors.greenAccent;
+    return tealGreen;
   }
 }
